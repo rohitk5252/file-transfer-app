@@ -12,7 +12,8 @@ router.get('/:uuid', async (req, res) =>{
             uuid: file.uuid,
             fileName: file.filename,
             fileSize: file.size,
-            download: `${process.env.APP_BASE_URL}/files/download/${file.uuid}`
+            downloadLink : `${process.env.APP_BASE_URL}/files/download/${file.uuid}`
+            // http://localhost300/files/download/random-uuid
         });
     } catch (err) {
         // will automatically try to findd file "download" in views folder

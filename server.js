@@ -6,14 +6,20 @@ const path = require('path');
 const connectDB = require('./config/db');
 connectDB();
 
-
+// To use static files
+app.use(express.static('public')); 
 // Template engine ( for EJS )
 app.set('views', path.join(__dirname,'/views'));
 app.set('view engine', 'ejs') ;
-// Routes 
-app.use('/api/files', require('./routes/files'));
-app.use('/files', require('./routes/show'));
 
+
+// Routes 
+// file upload request route
+app.use('/api/files', require('./routes/files'));
+// file download page show route
+app.use('/files', require('./routes/show'));
+// file download redirect route 
+app.use('/files/download', require('./routes/download'));
 
 
 const PORT = process.env.PORT || 3000;
