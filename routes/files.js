@@ -3,6 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const File = require('../models/file');
 const {v4: uuid4} = require('uuid');
+const { rootCertificates } = require('tls');
 
 let storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, 'uploads/'),
@@ -48,6 +49,45 @@ router.post('/', (req, res) => {
 
 
     //  Send Response ( Download link) 
+});
+
+router.post('/send', async (req, res) => {
+    // request validation
+     const {uuid, emailTo, emailFrom } = req.body;
+        if(!uuid || !emailTo || !emailFrom ) {
+
+            return res.status(422).send({
+                error: "All fields required"
+            })
+        }
+        // Get Data From Database
+        const file = await File.findOne({uuid: uuid});
+        if(file.sender) {
+            return res.status(422).send({
+                error: "Email Already Sent"
+            })
+        }
+        file.sender = emailFrom;
+        file.receiver = emailTo;
+        const response = await file.save();
+
+        // send email
+
+        const sendMail = require('../services/emailService');
+
+        sendMail({
+            from: emailFrom,
+            to: emailTo,
+            subject: "New File Shared through FTA",
+            text: `${emailFrom} shared a file with you.`,
+            html: require('../services/emailTemplate')(
+                emailFrom,
+                `${process.env.APP_BASE_URL}/files/${file.uuid}`,
+                parseInt(file.size/1000)+' KB',
+                '24 Hours'
+            )
+            // emailFrom, downloadLink, size, expires
+        });
 });
 
 module.exports = router;
