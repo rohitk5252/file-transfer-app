@@ -8,6 +8,8 @@ connectDB();
 
 // To use static files
 app.use(express.static('public')); 
+//  Express cannot parse JSON without this 
+app.use(express.json());
 // Template engine ( for EJS )
 app.set('views', path.join(__dirname,'/views'));
 app.set('view engine', 'ejs') ;

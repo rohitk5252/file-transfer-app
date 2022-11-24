@@ -62,6 +62,11 @@ router.post('/send', async (req, res) => {
         }
         // Get Data From Database
         const file = await File.findOne({uuid: uuid});
+        if(!file){
+            return res.status(500).send({
+                error: "Link Expired or Invalid file request"
+            })
+        }
         if(file.sender) {
             return res.status(422).send({
                 error: "Email Already Sent"
@@ -80,13 +85,16 @@ router.post('/send', async (req, res) => {
             to: emailTo,
             subject: "New File Shared through FTA",
             text: `${emailFrom} shared a file with you.`,
-            html: require('../services/emailTemplate')(
+            html: require('../services/emailTemplate')({
                 emailFrom,
-                `${process.env.APP_BASE_URL}/files/${file.uuid}`,
-                parseInt(file.size/1000)+' KB',
-                '24 Hours'
-            )
+                downloadLink: `${process.env.APP_BASE_URL}/files/${file.uuid}`,
+                size: parseInt(file.size/1000)+' KB',
+                expires: '24 Hours'
+        })
             // emailFrom, downloadLink, size, expires
+        });
+        return res.send({
+            sucess: true
         });
 });
 

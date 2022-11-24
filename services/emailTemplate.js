@@ -153,7 +153,7 @@ module.exports = ({emailFrom, downloadLink, size, expires}) => {
                             </tr>
                             <tr>
                             <td class="content-block powered-by" style="font-family: sans-serif; vertical-align: top; padding-bottom: 10px; padding-top: 10px; font-size: 12px; color: #999999; text-align: center;">
-                                Powered by <a href="https://www.youtube.com/channel/UCo9xTRmg1SqQ5JSsA2fAgJw" style="color: #999999; font-size: 12px; text-align: center; text-decoration: none;">Coders Gyan</a>.
+                                Powered by <a href="https://linkedin.com/in/rohitk5252" style="color: #999999; font-size: 12px; text-align: center; text-decoration: none;">@rohitk5252</a>.
                             </td>
                             </tr>
                         </table>
