@@ -1,7 +1,7 @@
 {
    "name": "fta-api",
    "version": "1.0.0",
-   "main": "server.js",
+   "main": "./server.js",
    "license": "MIT",
    "engines" : {
       "node": "14.x"
