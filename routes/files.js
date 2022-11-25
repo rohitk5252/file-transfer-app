@@ -15,7 +15,7 @@ let storage = multer.diskStorage({
 
 let upload = multer({
     storage: storage,
-    limit: {
+    limits: {
         fileSize: 1000000 * 100
     },
 }).single('myfile');
@@ -27,7 +27,7 @@ router.post('/', (req, res) => {
              // Validations of request 
             if(!req.file){
                 return res.json({
-                    error : 'All fields required'
+                    error : 'Add a file !!'
                 })
             }
 
@@ -60,18 +60,20 @@ router.post('/send', async (req, res) => {
                 error: "All fields required"
             })
         }
-        // Get Data From Database
+       try  { // Get Data From Database
         const file = await File.findOne({uuid: uuid});
         if(!file){
             return res.status(500).send({
                 error: "Link Expired or Invalid file request"
             })
         }
+        
         if(file.sender) {
             return res.status(422).send({
                 error: "Email Already Sent"
             })
         }
+    
         file.sender = emailFrom;
         file.receiver = emailTo;
         const response = await file.save();
@@ -96,6 +98,9 @@ router.post('/send', async (req, res) => {
         return res.send({
             sucess: true
         });
+    } catch (err) {
+        return res.status(500).send({erroe: 'Something went wrong'});
+    }
 });
 
 module.exports = router;
