@@ -6,7 +6,7 @@ const {v4: uuid4} = require('uuid');
 const { rootCertificates } = require('tls');
 
 let storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, 'uploads/'),
+    destination: (req,file, cb) => cb(null, 'uploads/'),
     filename: (req, file, cb) => {
         const uniqueName = `${Date.now()}-${Math.round(Math.random()*1E9)}${path.extname(file.originalname)}`;
         cb(null, uniqueName);
@@ -17,7 +17,7 @@ let upload = multer({
     storage: storage,
     limits: {
         fileSize: 1000000 * 100
-    },
+    }
 }).single('myfile');
 
 router.post('/', (req, res) => {
@@ -25,15 +25,15 @@ router.post('/', (req, res) => {
     // Store file
         upload(req, res, async (err) =>{
              // Validations of request 
-            if(req.file==undefined){
-                return res.json({
-                    error : 'Add a file !!'
-                })
-            }
-
-            if(err){
+             if(err){
                 return res.status(500).send({error: err.message})
             }
+
+            // if(req.file==undefined){
+            //     return res.json({
+            //         error : 'Add a file !!'
+            //     })
+            // }    
     // Store in databsase
             const file = new File({
                 filename: req.file.filename,
