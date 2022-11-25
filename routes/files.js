@@ -25,7 +25,7 @@ router.post('/', (req, res) => {
     // Store file
         upload(req, res, async (err) =>{
              // Validations of request 
-            if(!req.file){
+            if(req.file==undefined){
                 return res.json({
                     error : 'Add a file !!'
                 })
